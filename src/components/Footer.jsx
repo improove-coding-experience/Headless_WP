@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
@@ -96,9 +97,14 @@ function Footer() {
         {/* Bottom */}
         <div className="mt-8 border-t border-gray-800 pt-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-sm text-gray-400">
-              &copy; {currentYear} Real Estate Co. All rights reserved.
-            </p>
+            <div className="flex items-center gap-4">
+              <img
+                alt="Dream Property Logo"
+                src={logo}
+                className="w-32 sm:w-40 h-auto"
+              />
+              <p className="text-sm text-gray-400">&copy; {currentYear} Dream Property. All rights reserved.</p>
+            </div>
             <div className="flex gap-6">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <span className="sr-only">Facebook</span>

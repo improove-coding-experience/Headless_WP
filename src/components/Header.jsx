@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
 import {
   Dialog,
   DialogPanel,
@@ -44,11 +45,11 @@ function Header({ isLoggedIn, username, onLogout }) {
       <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Real Estate</span>
+            <span className="sr-only">Dream Property</span>
             <img
-              alt=""
-              src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-              className="h-8 w-auto"
+              alt="Dream Property Logo"
+              src={logo}
+              className="w-36 sm:w-44 lg:w-56 h-auto"
             />
           </Link>
         </div>
@@ -108,9 +109,9 @@ function Header({ isLoggedIn, username, onLogout }) {
           <div className="flex items-center justify-between">
             <Link to="/" className="-m-1.5 p-1.5">
               <img
-                alt=""
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
+                alt="Dream Property Logo"
+                src={logo}
+                className="w-32 h-auto"
               />
             </Link>
             <button

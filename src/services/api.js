@@ -21,6 +21,9 @@ export const fetchProperties = async () => {
     if (!response.ok) throw new Error(`HTTP ${response.status}: Failed to fetch properties`);
     const data = await response.json();
     console.log('Fetched properties:', data);
+    if (data.length === 0) {
+      console.warn('No properties found in the API response.');
+    }
     return data;
   } catch (error) {
     console.error('API Error:', error);

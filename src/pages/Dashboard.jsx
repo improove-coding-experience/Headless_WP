@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useInView } from '../hooks/useInView';
 import { fetchProperties } from '../services/api';
+import AnimatedCounter from '../components/AnimatedCounter';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function Dashboard() {
   const [properties, setProperties] = useState([]);
@@ -19,6 +24,7 @@ function Dashboard() {
     const getProperties = async () => {
       try {
         const data = await fetchProperties();
+        console.log('API Response:', data);
         // Add random status to properties for demo (in real app, this would come from WordPress)
         const propertiesWithStatus = data.map(property => ({
           ...property,
@@ -27,17 +33,21 @@ function Dashboard() {
         setProperties(propertiesWithStatus);
         
         // Calculate stats
-        const totalProps = propertiesWithStatus.length;
-        const soldProps = propertiesWithStatus.filter(p => p.status === 'Sold').length;
-        const availableProps = propertiesWithStatus.filter(p => p.status === 'Available').length;
-        const pendingProps = propertiesWithStatus.filter(p => p.status === 'Pending').length;
-        
-        setStats({
-          total: totalProps,
-          sold: soldProps,
-          available: availableProps,
-          pending: pendingProps,
-        });
+        const calculateStats = () => {
+          const totalProps = propertiesWithStatus.length;
+          const soldProps = propertiesWithStatus.filter(p => p.status === 'Sold').length;
+          const availableProps = propertiesWithStatus.filter(p => p.status === 'Available').length;
+          const pendingProps = propertiesWithStatus.filter(p => p.status === 'Pending').length;
+
+          setStats({
+            total: totalProps,
+            sold: soldProps,
+            available: availableProps,
+            pending: pendingProps,
+          });
+        };
+
+        calculateStats();
       } catch (error) {
         console.error('Error fetching properties:', error);
       } finally {
@@ -47,6 +57,14 @@ function Dashboard() {
 
     getProperties();
   }, []);
+
+  useEffect(() => {
+    console.log('Properties data:', properties);
+  }, [properties]);
+
+  useEffect(() => {
+    console.log('Stats calculation:', stats);
+  }, [stats]);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -75,6 +93,36 @@ function Dashboard() {
       </div>
     );
   }
+
+  const salesData = {
+    labels: ['Sold', 'Available', 'Pending'],
+    datasets: [
+      {
+        label: 'Property Sales',
+        data: [stats.sold, stats.available, stats.pending],
+        backgroundColor: [
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)'
+        ],
+        borderColor: [
+          'rgba(75, 192, 192, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    },
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 py-12 px-6 lg:px-8">
@@ -133,14 +181,9 @@ function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-indigo-100 text-sm font-medium">Total Properties</p>
-                <motion.p 
-                  className="text-4xl font-bold mt-2"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  {stats.total}
-                </motion.p>
+                <p className="text-4xl font-bold mt-2">
+                  <AnimatedCounter targetNumber={stats.total} duration={2000} />
+                </p>
               </div>
               <motion.div 
                 className="bg-indigo-500 rounded-full p-3 opacity-20 button-transition"
@@ -165,14 +208,9 @@ function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-100 text-sm font-medium">Sold Properties</p>
-                <motion.p 
-                  className="text-4xl font-bold mt-2"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                >
-                  {stats.sold}
-                </motion.p>
+                <p className="text-4xl font-bold mt-2">
+                  <AnimatedCounter targetNumber={stats.sold} duration={2000} />
+                </p>
               </div>
               <motion.div 
                 className="bg-green-500 rounded-full p-3 opacity-20 button-transition"
@@ -197,14 +235,9 @@ function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-100 text-sm font-medium">Available</p>
-                <motion.p 
-                  className="text-4xl font-bold mt-2"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                >
-                  {stats.available}
-                </motion.p>
+                <p className="text-4xl font-bold mt-2">
+                  <AnimatedCounter targetNumber={stats.available} duration={2000} />
+                </p>
               </div>
               <motion.div 
                 className="bg-blue-500 rounded-full p-3 opacity-20 button-transition"
@@ -229,14 +262,9 @@ function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-yellow-100 text-sm font-medium">Pending</p>
-                <motion.p 
-                  className="text-4xl font-bold mt-2"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                >
-                  {stats.pending}
-                </motion.p>
+                <p className="text-4xl font-bold mt-2">
+                  <AnimatedCounter targetNumber={stats.pending} duration={2000} />
+                </p>
               </div>
               <motion.div 
                 className="bg-yellow-500 rounded-full p-3 opacity-20 button-transition"
@@ -464,6 +492,14 @@ function Dashboard() {
             </table>
           </div>
         </motion.div>
+
+        {/* Sales Graph */}
+        <div className="bg-gray-800 p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-bold mb-4 text-white">Sales Distribution</h2>
+          <div className="h-64">
+            <Pie data={salesData} options={options} />
+          </div>
+        </div>
       </div>
     </div>
   );
