@@ -1,6 +1,7 @@
 // WordPress REST API service
 const WP_BASE_URL = 'https://skyblue-kingfisher-507526.hostingersite.com/wp-json/wp/v2/properties';
 // const WP_BASE_URL = 'http://localhost/Real-estate-website/wp-json/wp/v2';
+
 const PROPERTIES_ENDPOINT = `${WP_BASE_URL}/properties`;
 
 // Fetch all properties
