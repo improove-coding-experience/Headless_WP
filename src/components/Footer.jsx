@@ -40,12 +40,7 @@ function Footer() {
                 <a href="#" className="text-sm text-gray-400 link-underline">
                   Blog
                 </a>
-              </li>
-              <li>
-                <a href="#" className="text-sm text-gray-400 link-underline">
-                  Blog
-                </a>
-              </li>
+              </li>              
             </ul>
           </div>
 
